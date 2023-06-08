@@ -1,0 +1,9 @@
+CRUD
+
+Create -- add a new item to the database
+Retrieve -- get item's from the database -> details
+Update -- update item's from the database
+Delete -- delete item from the database
+
+List -- list all items from the database (or a queryset)
+Search -- search all items from the database
