@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block content %}
+
+    <div class="row g-8 p-4">
+        <div class="col-md-6 mx-auto">
+            <form action="" method="post" class="form">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% buttons %}
+                    <button type="submit" class="btn btn-primary">Create Product</button>
+                {% endbuttons %}
+            </form>
+        </div>
+    </div>
+{% endblock content %}

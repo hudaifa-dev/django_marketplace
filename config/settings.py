@@ -40,9 +40,14 @@ DJANGO_APPS = [
 LOCAL_APPS = [
     "products",
 ]
-THIRD_PARTY_APPS = []
+THIRD_PARTY_APPS = [
+    'bootstrap5',
+]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
+
+# CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+# CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
