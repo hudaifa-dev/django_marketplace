@@ -1,4 +1,5 @@
 from django.db import models
+from django.dispatch import receiver
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
 
@@ -16,9 +17,7 @@ class Product(models.Model):
         return self.title
 
 
+@receiver(pre_save, sender=Product)
 def product_pre_save_receiver(sender, instance, *args, **kwargs):
     if instance.title:
         instance.slug = slugify(instance.title)
-
-
-pre_save.connect(product_pre_save_receiver, sender=Product)
