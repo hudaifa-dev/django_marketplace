@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='product',
+            model_name='products',
             name='slug',
             field=models.SlugField(default='slug-field', verbose_name='Slug'),
         ),

@@ -11,12 +11,12 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='product',
+            model_name='products',
             name='sale_price',
             field=models.DecimalField(blank=True, decimal_places=2, default=0.0, max_digits=100, null=True, verbose_name='Sale Price'),
         ),
         migrations.AlterField(
-            model_name='product',
+            model_name='products',
             name='price',
             field=models.DecimalField(decimal_places=2, default=0.0, max_digits=100, verbose_name='Price'),
         ),

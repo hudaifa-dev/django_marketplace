@@ -1,0 +1,15 @@
+{% extends 'templates/base.html' %}
+{% block content %}
+
+    <div class="row g-8 p-4">
+        <div class="col-md-6 mx-auto">
+            {% for instance in object_list %}
+                <li>{{ instance.title }} - {{ instance.price }}</li>
+            {% empty %}
+                <li>No product available now!</li>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock content %}
+

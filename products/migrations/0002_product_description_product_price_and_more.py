@@ -11,18 +11,18 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='product',
+            model_name='products',
             name='description',
             field=models.TimeField(blank=True, max_length=3000, null=True, verbose_name='Description'),
         ),
         migrations.AddField(
-            model_name='product',
+            model_name='products',
             name='price',
             field=models.DecimalField(decimal_places=2, default=0.0, max_digits=100, verbose_name='Price'),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='product',
+            model_name='products',
             name='title',
             field=models.CharField(max_length=100, verbose_name='Title'),
         ),
