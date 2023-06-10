@@ -6,7 +6,7 @@ from django.utils.text import slugify
 
 class Product(models.Model):
     title = models.CharField('Title', max_length=100)
-    slug = models.SlugField('Slug', blank=True, null=True)
+    slug = models.SlugField('Slug', blank=True, null=True, unique=True)
     description = models.TextField('Description', max_length=3000, blank=True, null=True)
     price = models.DecimalField('Price', max_digits=100, decimal_places=2, default=0.00)
     sale_price = models.DecimalField(
@@ -17,7 +17,23 @@ class Product(models.Model):
         return self.title
 
 
+# Signals for product
+def create_slug(instance, new_slug=None):
+    slug = slugify(instance.title)
+    if new_slug is not None:
+        slug = new_slug
+    qs = Product.objects.filter(slug=slug)
+    exists = qs.exists()
+    if exists:
+        new_slug = '%s-%s' % (slug, qs.first().id)
+        return create_slug(instance, new_slug=new_slug)
+    return slug
+
+
 @receiver(pre_save, sender=Product)
-def product_pre_save_receiver(sender, instance, *args, **kwargs):
-    if instance.title:
-        instance.slug = slugify(instance.title)
+def product_pre_save_receiver(instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = create_slug(instance)
+
+
+
