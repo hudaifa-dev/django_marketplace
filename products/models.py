@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
+from django.urls import reverse
 from django.utils.text import slugify
 
 
@@ -18,6 +19,10 @@ class Product(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    @staticmethod
+    def get_absolute_url():
+        return reverse('products:product_list')
 
 
 # Signals for product

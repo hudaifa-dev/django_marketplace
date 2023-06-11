@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.views import generic
 from products.forms import CreateProductForm
 from products.models import Product
@@ -15,7 +16,7 @@ class ProductListView(generic.ListView):
 class ProductCreateView(LoginRequiredMixin, SubmitButtonMixin, MultipleMixin, generic.CreateView):
     model = Product
     form_class = CreateProductForm
-    success_url = '/products/'
+    # success_url = '/products/product_list/'
     submit_btn = 'Create Product'
 
     def form_valid(self, form):
@@ -29,7 +30,7 @@ class ProductCreateView(LoginRequiredMixin, SubmitButtonMixin, MultipleMixin, ge
 class ProductUpdateView(ProductManagerMixin, SubmitButtonMixin, MultipleMixin, generic.UpdateView):
     model = Product
     form_class = CreateProductForm
-    success_url = '/products/'
+    # success_url = '/products/product_list'
     submit_btn = 'Update Product'
 
 

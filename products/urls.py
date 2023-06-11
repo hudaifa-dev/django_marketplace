@@ -3,7 +3,7 @@ from products.views import ProductListView, ProductDetailsView, ProductCreateVie
 
 app_name = 'products'
 urlpatterns = [
-    path('', ProductListView.as_view(), name='product_list'),
+    path('list/', ProductListView.as_view(), name='product_list'),
     # ID or Slug
     path('create/', ProductCreateView.as_view(), name='product_create'),
     path('<str:slug>/', ProductCreateView.as_view(), name='product_create'),
