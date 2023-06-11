@@ -1,4 +1,41 @@
+from django.http import Http404
 from django.shortcuts import get_object_or_404
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
+
+class LoginRequiredMixin(object):
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
+
+
+class StaffRequiredMixin(object):
+    @method_decorator(staff_member_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(StaffRequiredMixin, self).dispatch(request, *args, **kwargs)
+
+
+class ProductManagerMixin(LoginRequiredMixin, object):
+    def __init__(self):
+        self.request = None
+
+    def get_object(self, *args, **kwargs):
+        user = self.request.user
+        obj = super(ProductManagerMixin, self).get_object(*args, **kwargs)
+        try:
+            obj.user == user
+        except:
+            raise Http404
+        try:
+            user in obj.managers.all()
+        except:
+            raise Http404
+        if obj == user or user in obj.managers.all():
+            return obj
+        else:
+            raise Http404
 
 
 class MultipleMixin(object):
