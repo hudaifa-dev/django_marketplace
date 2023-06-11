@@ -1,10 +1,13 @@
 from django.db import models
+from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
 
 
 class Product(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    managers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='managers_product')
     title = models.CharField('Title', max_length=100)
     slug = models.SlugField('Slug', blank=True, null=True, unique=True)
     description = models.TextField('Description', max_length=3000, blank=True, null=True)
@@ -34,6 +37,3 @@ def create_slug(instance, new_slug=None):
 def product_pre_save_receiver(instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = create_slug(instance)
-
-
-

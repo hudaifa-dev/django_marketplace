@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.views import generic
 from products.forms import CreateProductForm
 from products.models import Product
@@ -15,8 +16,15 @@ class ProductListView(generic.ListView):
 class ProductCreateView(SubmitButtonMixin, MultipleMixin, generic.CreateView):
     model = Product
     form_class = CreateProductForm
-    success_url = '/products/create/'
+    success_url = '/products/'
     submit_btn = 'Create Product'
+
+    def form_valid(self, form):
+        user = self.request.user
+        form.instance.user = user
+        valid_data = super(ProductCreateView, self).form_valid(form)
+        form.instance.managers.add(user)
+        return valid_data
 
 
 class ProductUpdateView(SubmitButtonMixin, MultipleMixin, generic.UpdateView):
@@ -24,6 +32,14 @@ class ProductUpdateView(SubmitButtonMixin, MultipleMixin, generic.UpdateView):
     form_class = CreateProductForm
     success_url = '/products/'
     submit_btn = 'Update Product'
+
+    def get_object(self, *args, **kwargs):
+        user = self.request.user
+        obj = super(ProductUpdateView, self).get_object(*args, **kwargs)
+        if obj == user or user in obj.managers.all():
+            return obj
+        else:
+            raise Http404
 
 
 class ProductDetailsView(MultipleMixin, generic.DetailView):
