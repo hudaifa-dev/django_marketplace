@@ -8,7 +8,9 @@
             <p class="text-primary">{{ object.price }}</p>
             {% if object.media %}
                 <a href="{{ object.get_download }}">Download</a>
-            {% endif %} 
+                <hr>
+                <a href="{{ object.get_download }}?preview=True">Preview</a>
+            {% endif %}
         </div>
     </div>
 
