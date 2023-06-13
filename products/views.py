@@ -1,4 +1,3 @@
-from django.urls import reverse
 from django.views import generic
 from products.forms import CreateProductForm
 from products.models import Product
