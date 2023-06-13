@@ -6,8 +6,13 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 
+def download_media_location(instance, filename):
+    return '%s / %s' % (instance.id, filename)
+
+
 class Product(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    media = models.FileField(blank=True, null=True, upload_to=download_media_location)
     managers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='managers_product')
     title = models.CharField('Title', max_length=100)
     slug = models.SlugField('Slug', blank=True, null=True, unique=True)
