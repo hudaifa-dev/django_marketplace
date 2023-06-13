@@ -6,7 +6,7 @@
             <h1 class="text-primary">Product: {{ object.title }}</h1>
             <p>{{ object.description }}</p>
             <p class="text-primary">{{ object.price }}</p>
-            {% if object.media %}
+            {% if request.user.is_authenticated and object.media and object in request.user.myproduct.product.all %}
                 <a href="{{ object.get_download }}">Download</a>
                 <hr>
                 <a href="{{ object.get_download }}?preview=True">Preview</a>

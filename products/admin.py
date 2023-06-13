@@ -1,5 +1,5 @@
 from django.contrib import admin
-from products.models import Product
+from products.models import Product, MyProduct
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -12,4 +12,12 @@ class ProductAdmin(admin.ModelAdmin):
         model = Product
 
 
+class MyProductAdmin(admin.ModelAdmin):
+    list_display = ['__unicode__']
+
+    class Meta:
+        model = MyProduct
+
+
 admin.site.register(Product, ProductAdmin)
+admin.site.register(MyProduct, MyProductAdmin)

@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.db.models.fields import related
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
 from django.urls import reverse
@@ -40,6 +41,14 @@ class Product(models.Model):
         view_namae = 'products:product_download'
         url = reverse(view_namae, kwargs={'slug': self.slug})
         return url
+
+
+class MyProduct(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    product = models.ManyToManyField(Product, blank=True)
+
+    def __unicode__(self):
+        return self.product.count()
 
 
 # Signals for product
