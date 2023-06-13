@@ -1,3 +1,8 @@
+import os
+from wsgiref.util import FileWrapper
+
+from django.conf import settings
+from django.http import HttpResponse
 from django.views import generic
 from products.forms import CreateProductForm
 from products.models import Product
@@ -35,6 +40,21 @@ class ProductUpdateView(ProductManagerMixin, SubmitButtonMixin, MultipleMixin, g
 
 class ProductDetailsView(MultipleMixin, generic.DetailView):
     model = Product
+
+
+class ProductDownloadView(MultipleMixin, generic.DetailView):
+    model = Product
+
+    def get(self, request, *args, **kwargs):
+        _object = self.get_object()
+        filepath = os.path.join(settings.PROTECTED_ROOT, _object.media.path)
+        with open(filepath, 'rb') as f:
+            wrapper = FileWrapper(f)
+            # wrapper = FileWrapper(open(filepath))
+            response = HttpResponse(wrapper, content_type='application/force-download')
+            response['Content-Disposition'] = 'attachment; filename="%s"' % _object.media.name
+            response['X-SendFile'] = str(_object.media.name)
+            return response
 
 # def list_view(request):
 #     context = {}

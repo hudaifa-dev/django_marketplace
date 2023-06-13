@@ -6,6 +6,9 @@
             <h1 class="text-primary">Product: {{ object.title }}</h1>
             <p>{{ object.description }}</p>
             <p class="text-primary">{{ object.price }}</p>
+            {% if object.media %}
+                <a href="{{ object.get_download }}">Download</a>
+            {% endif %} 
         </div>
     </div>
 

@@ -29,9 +29,17 @@ class Product(models.Model):
     def __unicode__(self):
         return self.title
 
+    def __str__(self):
+        return self.title
+
     @staticmethod
     def get_absolute_url():
         return reverse('products:product_list')
+
+    def get_download(self):
+        view_namae = 'products:product_download'
+        url = reverse(view_namae, kwargs={'slug': self.slug})
+        return url
 
 
 # Signals for product
