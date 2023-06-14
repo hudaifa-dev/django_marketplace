@@ -11,6 +11,8 @@
                 <hr>
                 <a href="{{ object.get_download }}?preview=True">Preview</a>
             {% endif %}
+        <hr>
+        <a href="{% url 'products:product_list' %}" class="text-danger">Back</a>
         </div>
     </div>
 

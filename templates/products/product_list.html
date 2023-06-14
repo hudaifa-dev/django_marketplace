@@ -4,7 +4,11 @@
     <div class="row g-8 p-4">
         <div class="col-md-6 mx-auto">
             {% for instance in object_list %}
-                <li>{{ instance.title }} - {{ instance.price }}</li>
+                <a href="{{ instance.get_details_url }}">
+                    <li>{{ instance.title }}</li> <li>{{ instance.price }}</li><br/>
+                </a>
+                    <li>{{ instance.description|truncatechars:10 }}</li><br/>
+
             {% empty %}
                 <li>No product available now!</li>
             {% endfor %}
