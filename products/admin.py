@@ -1,9 +1,9 @@
 from django.contrib import admin
-from products.models import Product, MyProduct
+from products.models import Product, MyProduct, ProductImage
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['__unicode__', 'slug', 'id', 'price', 'sale_price']
+    list_display = ['slug', 'id', 'price', 'sale_price']
     list_filter = ['price']
     list_editable = ['sale_price']
     search_fields = ['title', 'description']
@@ -12,12 +12,6 @@ class ProductAdmin(admin.ModelAdmin):
         model = Product
 
 
-class MyProductAdmin(admin.ModelAdmin):
-    list_display = ['__unicode__']
-
-    class Meta:
-        model = MyProduct
-
-
 admin.site.register(Product, ProductAdmin)
-admin.site.register(MyProduct, MyProductAdmin)
+admin.site.register(MyProduct)
+admin.site.register(ProductImage)

@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -9,7 +10,11 @@ from django.utils.text import slugify
 
 
 def download_media_location(instance, filename):
-    return '%s / %s' % (instance.id, filename)
+    return f'{instance.slug}, {filename}'
+
+
+def download_image_location(instance, filename):
+    return f'{instance.product.slug}, {filename}'
 
 
 class Product(models.Model):
@@ -27,9 +32,6 @@ class Product(models.Model):
         'Sale Price', max_digits=100, decimal_places=2, default=0.00, null=True, blank=True
     )
 
-    def __unicode__(self):
-        return self.title
-
     def __str__(self):
         return self.title
 
@@ -46,12 +48,21 @@ class Product(models.Model):
         return url
 
 
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    image = models.ImageField(blank=True, null=True, upload_to=download_image_location)
+
+    def __str__(self):
+        return f'{self.image}'
+
+
 class MyProduct(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     product = models.ManyToManyField(Product, blank=True)
 
-    def __unicode__(self):
-        return self.product.count()
+    def __str__(self):
+        return f'{self.product.count()}'
 
 
 # Signals for product
