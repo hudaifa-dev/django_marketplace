@@ -1,13 +1,15 @@
 import os
-from wsgiref.util import FileWrapper
 from mimetypes import guess_type
+from wsgiref.util import FileWrapper
+
 from django.conf import settings
 from django.db.models import Q
 from django.http import HttpResponse, Http404
 from django.views import generic
+
 from products.forms import CreateProductForm
-from products.models import Product
 from products.mixins import MultipleMixin, SubmitButtonMixin, LoginRequiredMixin, ProductManagerMixin
+from products.models import Product
 
 
 class ProductListView(generic.ListView):

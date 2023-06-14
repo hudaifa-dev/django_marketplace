@@ -2,7 +2,12 @@ from django.contrib import admin
 from products.models import Product, MyProduct, ProductImage
 
 
+class ProductImageAdmin(admin.TabularInline):
+    model = ProductImage
+
+
 class ProductAdmin(admin.ModelAdmin):
+    inlines = [ProductImageAdmin]
     list_display = ['slug', 'id', 'price', 'sale_price']
     list_filter = ['price']
     list_editable = ['sale_price']
