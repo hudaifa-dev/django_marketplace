@@ -2,6 +2,7 @@ import os
 from wsgiref.util import FileWrapper
 from mimetypes import guess_type
 from django.conf import settings
+from django.db.models import Q
 from django.http import HttpResponse, Http404
 from django.views import generic
 from products.forms import CreateProductForm
@@ -12,9 +13,15 @@ from products.mixins import MultipleMixin, SubmitButtonMixin, LoginRequiredMixin
 class ProductListView(generic.ListView):
     model = Product
 
-    def get_queryset(self, *args, **kwargs):
-        qs = super(ProductListView, self).get_queryset()
-        return qs
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Product.objects.filter(
+                Q(title__icontains=query) |
+                Q(description__icontains=query)
+            )
+        else:
+            return Product.objects.all()
 
 
 class ProductCreateView(LoginRequiredMixin, SubmitButtonMixin, MultipleMixin, generic.CreateView):
