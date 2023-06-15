@@ -40,6 +40,7 @@ DJANGO_APPS = [
 ]
 LOCAL_APPS = [
     "products",
+    "tags",
 ]
 THIRD_PARTY_APPS = [
     'bootstrap5',

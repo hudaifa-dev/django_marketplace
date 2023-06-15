@@ -9,41 +9,52 @@ from django.utils.text import slugify
 
 
 def download_media_location(instance, filename):
-    return f'{instance.slug}, {filename}'
+    return f"{instance.slug}, {filename}"
 
 
 def download_image_location(instance, filename):
-    return f'{instance.product.slug}, {filename}'
+    return f"{instance.product.slug}, {filename}"
 
 
 class Product(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     media = models.FileField(
-        blank=True, null=True, upload_to=download_media_location, storage=FileSystemStorage(
-            location=settings.PROTECTED_ROOT)
+        blank=True,
+        null=True,
+        upload_to=download_media_location,
+        storage=FileSystemStorage(location=settings.PROTECTED_ROOT)
     )
-    managers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='managers_product')
-    title = models.CharField('Title', max_length=100)
-    slug = models.SlugField('Slug', blank=True, null=True, unique=True)
-    description = models.TextField('Description', max_length=3000, blank=True, null=True)
-    price = models.DecimalField('Price', max_digits=100, decimal_places=2, default=0.00)
+    managers = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="managers_product"
+    )
+    title = models.CharField("Title", max_length=100)
+    slug = models.SlugField("Slug", blank=True, null=True, unique=True)
+    description = models.TextField(
+        "Description", max_length=3000, blank=True, null=True
+    )
+    price = models.DecimalField("Price", max_digits=100, decimal_places=2, default=0.00)
     sale_price = models.DecimalField(
-        'Sale Price', max_digits=100, decimal_places=2, default=0.00, null=True, blank=True
+        "Sale Price",
+        max_digits=100,
+        decimal_places=2,
+        default=0.00,
+        null=True,
+        blank=True,
     )
 
     def __str__(self):
         return self.title
 
-    @staticmethod
-    def get_absolute_url():
-        return reverse('products:product_list')
+    @property
+    def get_absolute_url(self):
+        return reverse("products:product_list")
 
     def get_details_url(self):
-        return reverse('products:product_detail', kwargs={'pk': self.pk})
+        return reverse("products:product_detail", kwargs={"pk": self.pk})
 
     def get_download(self):
-        view_namae = 'products:product_download'
-        url = reverse(view_namae, kwargs={'slug': self.slug})
+        view_namae = "products:product_download"
+        url = reverse(view_namae, kwargs={"slug": self.slug})
         return url
 
 
@@ -53,7 +64,7 @@ class ProductImage(models.Model):
     image = models.ImageField(blank=True, null=True, upload_to=download_image_location)
 
     def __str__(self):
-        return f'{self.image}'
+        return f"{self.image}"
 
 
 class MyProduct(models.Model):
@@ -61,7 +72,7 @@ class MyProduct(models.Model):
     product = models.ManyToManyField(Product, blank=True)
 
     def __str__(self):
-        return f'{self.product.count()}'
+        return f"{self.product.count()}"
 
 
 # Signals for product
@@ -72,7 +83,7 @@ def create_slug(instance, new_slug=None):
     qs = Product.objects.filter(slug=slug)
     exists = qs.exists()
     if exists:
-        new_slug = '%s-%s' % (slug, qs.first().id)
+        new_slug = "%s-%s" % (slug, qs.first().id)
         return create_slug(instance, new_slug=new_slug)
     return slug
 
@@ -81,3 +92,10 @@ def create_slug(instance, new_slug=None):
 def product_pre_save_receiver(instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = create_slug(instance)
+
+# @receiver(post_save, sender=ProductImage)
+# def product_image_post_save_receiver(instance, created, *args, **kwargs):
+#     if instance.media:
+#         hd = ProductImage.objects.get_or_create(product=instance, type="hd")[0]
+#         sd = ProductImage.objects.get_or_create(product=instance, type="sd")[0]
+#         micro = ProductImage.objects.get_or_create(product=instance, type="micro")[0]

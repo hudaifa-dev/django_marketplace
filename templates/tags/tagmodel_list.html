@@ -1,0 +1,24 @@
+{% extends 'templates/base.html' %}
+{% block content %}
+
+    <div class="row g-8 p-4">
+        <div class="col-md-6 mx-auto">
+            {% for instance in object_list %}
+                <a href="{{ instance.get_absolute_url }}">
+                    <li>
+                        {{ instance.name }} | {{ instance.product.count }}product{% if instance.product.count > 1 %}'s{% endif %}
+                    </li>
+                    <br/>
+                </a>
+                {% empty %}
+                <div class="row g-8 p-9">
+                    <div class="col-md-9 mx-auto">
+                        <h1 class="text-danger">No tags available now 🥲</h1>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock content %}
+

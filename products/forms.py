@@ -5,6 +5,7 @@ from products.models import Product
 
 class CreateProductForm(forms.ModelForm):
     PUBLISH_CHOICES = (('publish', 'Publish'), ('draft', 'Draft'),)
+    tags = forms.CharField(required=False)
     publish = forms.ChoiceField(widget=forms.RadioSelect, choices=PUBLISH_CHOICES)
 
     class Meta:

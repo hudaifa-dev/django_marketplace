@@ -1,0 +1,16 @@
+{% extends 'templates/base.html' %}
+{% block content %}
+
+    <div class="row g-8 p-4">
+        <div class="col-md-6 mx-auto">
+            {% for product_instance in object.products.all %}
+            <h6 class="text-primary">Tags: {{ product_instance.products_set.all.first.image.url }} </h6>
+            {% endfor %}
+
+
+            <hr>
+            <a href="{% url 'tags:list' %}" class="text-danger">Back</a>
+        </div>
+    </div>
+
+{% endblock content %}

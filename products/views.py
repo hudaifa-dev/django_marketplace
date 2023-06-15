@@ -10,6 +10,7 @@ from django.views import generic
 from products.forms import CreateProductForm
 from products.mixins import MultipleMixin, SubmitButtonMixin, LoginRequiredMixin, ProductManagerMixin
 from products.models import Product
+from tags.models import TagModel
 
 
 class ProductListView(generic.ListView):
@@ -45,6 +46,22 @@ class ProductUpdateView(ProductManagerMixin, SubmitButtonMixin, MultipleMixin, g
     form_class = CreateProductForm
     # success_url = '/products/product_list'
     submit_btn = 'Update Product'
+
+    def get_initial(self):
+        initial = super(ProductUpdateView, self).get_initial()
+        tags = self.get_object().tagmodel_set.all()
+        initial['tags'] = ''.join([x.name for x in tags])
+        return initial
+
+    def form_valid(self, form):
+        valid_data = super(ProductUpdateView, self).form_valid(form)
+        tags = form.cleaned_data.get('tags')
+        if tags:
+            tag_list = tags.split(',')
+            for tag in tag_list:
+                new_tag = TagModel.objects.get_or_create(name=str(tag).strip())[0]
+                new_tag.product.add(self.get_object())
+        return valid_data
 
 
 class ProductDetailsView(MultipleMixin, generic.DetailView):
